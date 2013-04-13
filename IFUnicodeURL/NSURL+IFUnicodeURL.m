@@ -100,10 +100,11 @@ static NSString *ConvertUnicodeURLString(NSString *str, BOOL toAscii)
 	CFStringRef finalAfterHostname = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, processedAfterHostname, CFSTR("#[]"), NULL, kCFStringEncodingUTF8);
 	
 	// Now recreate the URL safely with the new hostname (if it was successful) instead...
-	NSArray *reconstructedArray = [NSArray arrayWithObjects:[urlParts objectAtIndex:0], [urlParts objectAtIndex:1], [urlParts objectAtIndex:3], hostname, CFBridgingRelease(finalAfterHostname), nil];
+	NSArray *reconstructedArray = [NSArray arrayWithObjects:[urlParts objectAtIndex:0], [urlParts objectAtIndex:1], [urlParts objectAtIndex:3], hostname, (__bridge id)finalAfterHostname, nil];
 	NSString *reconstructedURLString = [reconstructedArray componentsJoinedByString:@""];
 
 	if (cleanedAfterHostname) CFRelease(cleanedAfterHostname);
+	if (afterHostname) CFRelease(afterHostname);
 	CFRelease(finalAfterHostname);
 
 	return reconstructedURLString;
